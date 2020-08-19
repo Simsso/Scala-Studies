@@ -18,4 +18,15 @@ object Exercise0403 {
 
     partialF.flatMap(applyBtoC)
   }
+
+  def map22[A, B, C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] = {
+    a.flatMap(a => b.map(b => f(a, b)))
+  }
+
+  def map23[A, B, C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] = {
+    for {
+      aVal <- a
+      bVal <- b
+    } yield f(aVal, bVal)
+  }
 }
