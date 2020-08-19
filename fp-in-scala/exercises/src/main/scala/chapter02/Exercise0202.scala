@@ -3,6 +3,7 @@ package chapter02
 object Exercise0202 {
   def all(xs: Iterable[Boolean]): Boolean = {
     def and(x1: Boolean, x2: Boolean): Boolean = x1 && x2
+
     xs.reduce(and)
   }
 
@@ -10,6 +11,7 @@ object Exercise0202 {
     if (as.length < 2) true
     else {
       def localCheck(i: Int): Boolean = ordered(as(i - 1), as(i))
+
       this.all((1 until as.length).map(localCheck))
     }
   }

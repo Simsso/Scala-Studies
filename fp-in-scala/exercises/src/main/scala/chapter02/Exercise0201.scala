@@ -15,6 +15,7 @@ object Exercise0201 {
       if (ctr == n) fibpp + fibp
       else go(fibp, fibp + fibpp, ctr + 1)
     }
+
     if (n == 0) 0
     else if (n == 1) 1
     else go(0, 1, 2)
