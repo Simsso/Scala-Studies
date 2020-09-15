@@ -5,6 +5,11 @@ class Exercise0401 {
 }
 
 trait MyOption[+A] {
+  /*
+  Implement flatMap with pattern matching and all other ones without it,
+  only based on flatMap.
+   */
+  
   def map[B](f: A => B): MyOption[B]
 
   def flatMap[B](f: A => MyOption[B]): MyOption[B]
@@ -14,18 +19,6 @@ trait MyOption[+A] {
   def orElse[B >: A](ob: => MyOption[B]): MyOption[B]
 
   def filter(f: A => Boolean): MyOption[A]
-}
-
-case class MySome[+A](get: A) extends MyOption[A] {
-  override def map[B](f: A => B): MyOption[B] = MySome(f(this.get))
-
-  override def flatMap[B](f: A => MyOption[B]): MyOption[B] = f(this.get)
-
-  override def getOrElse[B >: A](default: => B): B = this.get
-
-  override def orElse[B >: A](ob: => MyOption[B]): MyOption[B] = this
-
-  override def filter(f: A => Boolean): MyOption[A] = if (f(this.get)) this else MyNone
 }
 
 case object MyNone extends MyOption[Nothing] {
@@ -38,4 +31,16 @@ case object MyNone extends MyOption[Nothing] {
   override def orElse[B >: Nothing](ob: => MyOption[B]): MyOption[B] = ob
 
   override def filter(f: Nothing => Boolean): MyOption[Nothing] = this
+}
+
+case class MySome[+A](get: A) extends MyOption[A] {
+  override def map[B](f: A => B): MyOption[B] = MySome(f(this.get))
+
+  override def flatMap[B](f: A => MyOption[B]): MyOption[B] = f(get)
+
+  override def getOrElse[B >: A](default: => B): B = this.get
+
+  override def orElse[B >: A](ob: => MyOption[B]): MyOption[B] = this
+
+  override def filter(f: A => Boolean): MyOption[A] = if (f(this.get)) this else MyNone
 }
