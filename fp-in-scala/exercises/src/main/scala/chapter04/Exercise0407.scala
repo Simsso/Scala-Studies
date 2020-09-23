@@ -9,13 +9,24 @@ object Exercise0407 {
     es.foldLeft(Right(List()): Either[E, List[A]])((aggr: Either[E, List[A]], nextVal: Either[E, A]) => {
       aggr match {
         case Left(e) => Left(e)
-        case Right(l) => nextVal match {
-          case Left(e) => Left(e)
-          case Right(x) => Right(l :+ x)
-        }
+        case Right(l) =>
       }
     })
   }
+
+  def sequence2[E, A](es: List[Either[E, A]]): Either[E, List[A]] = {
+    es.foldLeft(Right(List()): Either[E, List[A]])((aggr: Either[E, List[A]], nextVal: Either[E, A]) => {
+      aggr.flatMap(l => nextVal match {
+        case Left(e) => Left(e)
+        case Right(x) => Right(l :+ x)
+      })
+    })
+  }
+
+  def sequence3[E, A](es: List[Either[E, A]]): Either[E, List[A]] = {
+    es.foldLeft(Right(List()): Either[E, List[A]])((aggr, nextVal) => aggr.flatMap(l => nextVal.flatMap(x => Right(l :+ x))))
+  }
+
 
   def traverse[E, A, B](as: List[A])(f: A => Either[E, B]): Either[E, List[B]] = {
     /*
@@ -36,5 +47,9 @@ object Exercise0407 {
         }
       }
     })
+  }
+
+  def traverse2[E, A, B](as: List[A])(f: A => Either[E, B]): Either[E, List[B]] = {
+    as.foldLeft(Right(List()): Either[E, List[B]])((aggr: Either[E, List[B]], nextVal: Either[E, A]) => ???)
   }
 }
