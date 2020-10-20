@@ -5,4 +5,6 @@ class Exercise0508 {
     val x = Stream.cons(a, x)
     x
   }
+
+  def constantBetter[A](a: A): Stream[A] = Stream.cons(a, constantBetter(a))
 }
