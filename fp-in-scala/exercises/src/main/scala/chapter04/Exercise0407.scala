@@ -9,7 +9,7 @@ object Exercise0407 {
     es.foldLeft(Right(List()): Either[E, List[A]])((aggr: Either[E, List[A]], nextVal: Either[E, A]) => {
       aggr match {
         case Left(e) => Left(e)
-        case Right(l) =>
+        case Right(l) => ???
       }
     })
   }
@@ -31,7 +31,6 @@ object Exercise0407 {
   def traverse[E, A, B](as: List[A])(f: A => Either[E, B]): Either[E, List[B]] = {
     /*
     Same problems as above, the nesting can probably be removed with map2. (?)
-     */
     as.foldLeft(Right(List()): Either[E, List[B]])((aggr: Either[E, List[B]], nextVal: Either[E, A]) => {
       aggr match {
         case Left(e) => Left(e)
@@ -40,16 +39,18 @@ object Exercise0407 {
           case Right(x) => {
             val fx = f(x)
             fx match {
-              case Left(x) => Left(e)
-              case Right(x) => Right(l := x)
+              case Left(x) => ??? // Left(e)
+              case Right(x) => ??? // Right(l := x)
             }
           }
         }
       }
     })
+     */
+    ???
   }
 
-  def traverse2[E, A, B](as: List[A])(f: A => Either[E, B]): Either[E, List[B]] = {
+  /*def traverse2[E, A, B](as: List[A])(f: A => Either[E, B]): Either[E, List[B]] = {
     as.foldLeft(Right(List()): Either[E, List[B]])((aggr: Either[E, List[B]], nextVal: Either[E, A]) => ???)
-  }
+  }*/
 }

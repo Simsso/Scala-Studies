@@ -20,22 +20,24 @@ object Stream {
   def apply[A](as: A*): Stream[A] =
     if (as.isEmpty) empty else cons(as.head, apply(as.tail: _*))
 
-  def toList[A](): List[A] = {
+  /*def toList[A](): List[A] = {
     this match {
       case Cons(h, t) => h() :: (t().toList)
       case _ => Nil
     }
-  }
+  }*/
 
-  def foldRight[B](z: => B)(f: (A, => B) => B): B =
+  /*def foldRight[B](z: => B)(f: (A, => B) => B): B =
     this match {
       case Cons(h, t) => f(h(), t().foldRight(z)(f))
       case Empty => z
     }
+  */
 
-  def forAll(p: A => Boolean): Boolean =
+  /*def forAll(p: A => Boolean): Boolean =
     this match {
       case Cons(h, t) => p(h()) && (t().forAll(p))
       case Empty => true
     }
+  */
 }
