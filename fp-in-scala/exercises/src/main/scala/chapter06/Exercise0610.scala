@@ -32,7 +32,7 @@ object State {
 
   def unit[A](a: A): State[S, A] = State((s: S) => (a, s))
 
-  def sequence[A](fs: List[State[S, A]]): State[S, List[A]] =
+  def sequence[S, A](fs: List[State[S, A]]): State[S, List[A]] =
     State(sOld => {
       fs.foldRight((List.empty: List[A], sOld))((ra, acc) => {
         val (lst, sOld) = acc
@@ -40,5 +40,4 @@ object State {
         (a :: lst, sNew)
       })
     })
-
 }

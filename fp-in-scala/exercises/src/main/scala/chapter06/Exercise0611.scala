@@ -8,21 +8,19 @@ case object Turn extends Input
 case class Machine(locked: Boolean, candies: Int, coins: Int)
 
 object Machine {
-  def simulateCoinStep(): State[Machine, (Int, Int)] = {
+  def simulateCoinStep(): State[Machine, (Int, Int)] =
     State((s: Machine) => {
       if (s.locked) ((s.coins + 1, s.candies), Machine(locked = false, s.candies, s.coins))
       else ((s.coins, s.candies), s)
     })
-  }
 
-  def simulateTurnStep(): State[Machine, (Int, Int)] = {
+  def simulateTurnStep(): State[Machine, (Int, Int)] =
     State((s: Machine) => {
       if (s.locked) ((s.coins, s.candies), s)
       else ((s.coins, s.candies - 1), Machine(locked=true, candies = s.candies - 1, coins=s.coins))
     })
-  }
 
-  def simulateSingleStep(input: Input): State[Machine, (Int, Int)] = {
+  def simulateSingleStep(input: Input): State[Machine, (Int, Int)] =
     State((s: Machine) => {
       if (s.candies <= 0) ((s.coins, s.candies), s)
       else {
@@ -32,13 +30,10 @@ object Machine {
         }
       }
     })
-  }
 
   def simulateMachine(inputs: List[Input]): State[Machine, (Int, Int)] = {
-    State((s: Machine) => {
-      inputs.foldRight(s, (input: Input, state: State[Machine, (Int, Int)]) => {
-        simulateSingleStep(input).run(state)
-      })
-    })
+    val transforms: List[State[Machine, (Int, Int)]] = inputs.map(simulateSingleStep)
+    val transformOfStates: State[Machine, List[(Int, Int)]] = State.sequence(transforms)
+    transformOfStates.map(l => l.last)
   }
 }
